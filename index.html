@@ -51,7 +51,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;b
 
 /* ══ HERO ══ */
 #hero{width:100%;height:100%;height:100dvh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:0 16px;}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=70&w=1600') center/cover no-repeat;}
+.hero-bg{position:absolute;inset:0;background:url('https://plus.unsplash.com/premium_photo-1756717240304-c873d90958ac?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,.92) 0%,rgba(5,5,5,.68) 48%,rgba(5,5,5,.96) 100%);}
 
 .hero-name{position:relative;z-index:2;text-align:center;margin-bottom:16px;width:100%;}
@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;b
   <div class="modal">
     <div class="mh"><div class="mt">Get In Touch</div><button class="mc" onclick="cm('contact')">✕</button></div>
     <div class="mb">
-      <a href="mailto:ranasaad988@gmail.com" class="c-em sel">ranasaad988@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#daa8bbb4bba9bbbbbee3e2e29abdb7bbb3b6f4b9b5b7" class="c-em sel"><span class="__cf_email__" data-cfemail="d2a0b3bcb3a1b3b3b6ebeaea92b5bfb3bbbefcb1bdbf">[email&#160;protected]</span></a>
       <div class="c-sg">
         <a href="https://www.linkedin.com/in/rana-saad-ullah-khan-b59478383/" target="_blank" rel="noopener" class="c-sc"><div class="c-si"><svg viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" fill="#0A66C2"/><rect x="2" y="9" width="4" height="12" fill="#0A66C2"/><circle cx="4" cy="4" r="2" fill="#0A66C2"/></svg></div><div class="c-st"><span>LinkedIn</span><strong>Rana Saad Ullah Khan</strong></div></a>
         <a href="https://www.instagram.com/saaddaaay/" target="_blank" rel="noopener" class="c-sc"><div class="c-si"><svg viewBox="0 0 24 24" fill="none"><defs><radialGradient id="ig2" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig2)"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="white" stroke-width="1.5" fill="none"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div><div class="c-st"><span>Instagram</span><strong>@saaddaaay</strong></div></a>
@@ -329,19 +329,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;b
   </div>
 </div>
 
-<!-- ══ MODAL: GALLERY ══ -->
-<div class="mo" id="modal-gallery">
-  <div class="modal">
-    <div class="mh"><div class="mt">🏍️ Ride Gallery</div><button class="mc" onclick="cm('gallery')">✕</button></div>
-    <div class="mb">
-      <div class="g-grid" id="gGrid">
-        <div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><p>No ride photos yet</p></div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 window.addEventListener('load', init);
 const CLOUD='day04dkda', TAG='saad_bikes';
 
@@ -425,35 +415,7 @@ function updDetail(){
 }
 document.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>{if(parseInt(c.dataset.i)===dkCur)dkNext();}));
 
-/* ── GALLERY ── */
-let galImgs=[];
-async function fetchGallery(){
-  const g=document.getElementById('gGrid');
-  if(galImgs.length){renderGal();return;}
-  g.innerHTML=`<div class="g-empty"><p>Loading...</p></div>`;
-  try{
-    const r=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json`);
-    const data=await r.json();
-    galImgs=(data.resources||[]).map(x=>`https://res.cloudinary.com/${CLOUD}/image/upload/q_auto,f_auto/${x.public_id}`);
-    renderGal();loadThumbs();
-  }catch{g.innerHTML=`<div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>No ride photos yet</p></div>`;}
-}
-function renderGal(){
-  const g=document.getElementById('gGrid');
-  if(!galImgs.length){g.innerHTML=`<div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><p>No ride photos yet</p></div>`;return;}
-  g.innerHTML=galImgs.map((u,i)=>`<div class="g-item" onclick="openLb('${u}')"><img src="${u}" loading="lazy" alt="Ride ${i+1}"></div>`).join('');
-}
-async function loadThumbs(){
-  try{
-    const r=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json`);
-    const d=await r.json();
-    (d.resources||[]).slice(0,4).forEach((x,i)=>{
-      const c=document.getElementById('gc'+i);if(!c)return;
-      c.innerHTML=`<img src="https://res.cloudinary.com/${CLOUD}/image/upload/w_80,h_80,c_fill,q_auto,f_auto/${x.public_id}" alt="">`;
-      c.classList.remove('ep');
-    });
-  }catch{}
-}
+
 
 /* ── LIGHTBOX ── */
 function openLb(u){document.getElementById('lb-img').src=u;document.getElementById('lb').classList.add('on');}
@@ -491,13 +453,4 @@ function triggerCon(){
   }
   setTimeout(drawLine,con.s.length*72+80);
   function showNm(){
-    nm.style.opacity='1';document.querySelector('.con-sb').style.opacity='1';
-    setTimeout(()=>{
-      nm.style.opacity='0';document.querySelector('.con-sb').style.opacity='0';
-      setTimeout(()=>{ov.classList.remove('on');ctx.clearRect(0,0,W,H);conActive=false;},600);
-    },2400);
-  }
-}
-</script>
-</body>
-</html>
+    nm.style.opacity='1';document.querySelector('.con-sb').style.opacity
