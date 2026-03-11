@@ -329,7 +329,17 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;b
   </div>
 </div>
 
-
+<!-- ══ MODAL: GALLERY ══ -->
+<div class="mo" id="modal-gallery">
+  <div class="modal">
+    <div class="mh"><div class="mt">🏍️ Ride Gallery</div><button class="mc" onclick="cm('gallery')">✕</button></div>
+    <div class="mb">
+      <div class="g-grid" id="gGrid">
+        <div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><p>No ride photos yet</p></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 window.addEventListener('load', init);
@@ -415,7 +425,35 @@ function updDetail(){
 }
 document.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>{if(parseInt(c.dataset.i)===dkCur)dkNext();}));
 
-
+/* ── GALLERY ── */
+let galImgs=[];
+async function fetchGallery(){
+  const g=document.getElementById('gGrid');
+  if(galImgs.length){renderGal();return;}
+  g.innerHTML=`<div class="g-empty"><p>Loading...</p></div>`;
+  try{
+    const r=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json`);
+    const data=await r.json();
+    galImgs=(data.resources||[]).map(x=>`https://res.cloudinary.com/${CLOUD}/image/upload/q_auto,f_auto/${x.public_id}`);
+    renderGal();loadThumbs();
+  }catch{g.innerHTML=`<div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>No ride photos yet</p></div>`;}
+}
+function renderGal(){
+  const g=document.getElementById('gGrid');
+  if(!galImgs.length){g.innerHTML=`<div class="g-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><p>No ride photos yet</p></div>`;return;}
+  g.innerHTML=galImgs.map((u,i)=>`<div class="g-item" onclick="openLb('${u}')"><img src="${u}" loading="lazy" alt="Ride ${i+1}"></div>`).join('');
+}
+async function loadThumbs(){
+  try{
+    const r=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json`);
+    const d=await r.json();
+    (d.resources||[]).slice(0,4).forEach((x,i)=>{
+      const c=document.getElementById('gc'+i);if(!c)return;
+      c.innerHTML=`<img src="https://res.cloudinary.com/${CLOUD}/image/upload/w_80,h_80,c_fill,q_auto,f_auto/${x.public_id}" alt="">`;
+      c.classList.remove('ep');
+    });
+  }catch{}
+}
 
 /* ── LIGHTBOX ── */
 function openLb(u){document.getElementById('lb-img').src=u;document.getElementById('lb').classList.add('on');}
